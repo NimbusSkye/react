@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 
 function App() {
 
-  function decrementCount () {
-    setCount(count - 1)
-  }
-  function incrementCount () {
-    setCount(count + 1)
-  }
-  const [count, setCount] = useState(1)
+  const [resourceType, setResourceType] = useState('posts')
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+    fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
+      .then(res=>res.json())
+      .then(js=>setItems(js))
+  }, [resourceType])
+
+
+
 
   return (
     <>
-      <button onClick={decrementCount}>-</button>
-      <span>{count}</span>
-      <button onClick={incrementCount}>+</button>
-      <img src={logo}></img>
+      <button onClick={()=>setResourceType('posts')}>Posts</button>
+      <button onClick={()=>setResourceType('users')}>Users</button>
+      <button onClick={()=>setResourceType('comments')}>Comments</button>
+      <h1>{resourceType}</h1>
+      <ul>
+        {items.map(item=> <li>{JSON.stringify(item)}</li>)}
+      </ul>
     </>
     
   );
