@@ -1,32 +1,22 @@
 // import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 function App() {
-
-  const [resourceType, setResourceType] = useState('posts')
-  const [items, setItems] = useState([])
-
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
-      .then(res=>res.json())
-      .then(js=>setItems(js))
-  }, [resourceType])
-
-
-
+  const [name, setName] = useState('')
+  const renderCount = useRef(1)
+  const prevName = useRef('')
+  
+  useEffect(()=>{
+     renderCount.current++
+     prevName.current=name
+  }, [name])
 
   return (
     <>
-      <button onClick={()=>setResourceType('posts')}>Posts</button>
-      <button onClick={()=>setResourceType('users')}>Users</button>
-      <button onClick={()=>setResourceType('comments')}>Comments</button>
-      <h1>{resourceType}</h1>
-      <ul>
-        {items.map(item=> <li>{JSON.stringify(item)}</li>)}
-      </ul>
+      <input value={name} onChange={e=>setName(e.target.value)}></input>
+      <h2>My name is {name} and I rendered {renderCount.current} times. It used to be {prevName.current}</h2>
     </>
-    
   );
 }
 
